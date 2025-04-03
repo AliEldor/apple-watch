@@ -1,0 +1,147 @@
+* {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.login-outer-container {
+  min-height: 100vh;
+}
+
+.login-container {
+  margin-top: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-area {
+  width: 500px;
+  padding: 40px;
+  box-shadow: 0 15px 30px 0 rgb(0 0 0 / 20%);
+}
+
+.login-area h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Added for new form structure */
+.form-field {
+  margin-bottom: 15px;
+}
+
+.reg {
+  padding-top: 8px;
+  font-size: 16px !important;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 19px;
+}
+
+.a {
+  text-decoration: none;
+  color: #008cff;
+  font-size: 18px;
+}
+
+.login-container .p {
+  margin: 0;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.a:hover {
+  color: #008cff;
+  text-decoration: underline;
+}
+
+.login-items .login {
+  width: 100%;
+  border-radius: 4px;
+  height: 42px;
+  background: #efefef;
+  outline: none;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+}
+
+::placeholder {
+  color: gray;
+  font-size: 18px;
+}
+
+.login-btn {
+  width: 100%;
+  color: #fff;
+  background-color: #008cff;
+  border-color: #008cff;
+  border: none;
+  border-radius: 4px;
+  height: 50px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.login-btn:disabled {
+  background-color: #80c5ff;
+  cursor: not-allowed;
+}
+
+.prompt {
+  text-align: center;
+  margin: 12px 0px 18px 0px;
+}
+
+.error-alert,
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.success-alert {
+  color: green;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 688px) {
+  .login-container {
+    margin-top: 45px;
+  }
+  
+  .login-area {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .a,
+  label {
+    font-size: 17px;
+  }
+  
+  .login-btn {
+    font-size: 17px;
+    height: 40px;
+    margin-top: 15px;
+  }
+  
+  .login {
+    height: 36px !important;
+  }
+}

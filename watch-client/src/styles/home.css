@@ -1,0 +1,165 @@
+/* Home.css - Styles for the Activity Tracker home page */
+
+/* Chart Styles */
+.chart-container {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: white;
+  }
+  
+  .chart-container h4 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .home-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .logout-btn {
+    padding: 8px 16px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .upload-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .upload-btn {
+    margin-left: 10px;
+    padding: 8px 16px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .upload-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .success-message {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  .error-message {
+    background-color: #f2dede;
+    color: #a94442;
+  }
+  
+  .generate-btn {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .generate-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .tab-btn {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .tab-btn.active {
+    background-color: #ddd;
+    border: 1px solid #999;
+    border-bottom: none;
+  }
+  
+  .tab-content {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px;
+    min-height: 300px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .prediction-section {
+    margin-bottom: 20px;
+  }
+  
+  .prediction-type {
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .prediction-list {
+    list-style-type: disc;
+    padding-left: 30px;
+  }
+  
+  .loading {
+    font-style: italic;
+    color: #666;
+  }

@@ -51,11 +51,10 @@ class ActivityPredictionController extends Controller
             
             ActivityPrediction::where('user_id', $userId)->delete();
             
-            // generate predictions using Gemini
             $predictions = $this->generateGeminiPredictions($userId, $activityData);
             
             if (empty($predictions)) {
-                // Fallback to simpler predictions if AI fails
+                // execute simpler predictions if api fails
                 $this->generateBasicPredictions($userId, $activityData);
             }
             
@@ -209,9 +208,11 @@ class ActivityPredictionController extends Controller
             $prompt = $this->createGeminiPrompt($formattedData);
             
             $apiKey = env('GEMINI_API_KEY');
-            $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+            $endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
             
-            $response = Http::withHeaders([
+            $response = Http::withOptions([
+                'verify' => false, // Disable SSL verification
+            ])->withHeaders([
                 'Content-Type' => 'application/json',
             ])->post($endpoint . '?key=' . $apiKey, [
                 'contents' => [
@@ -245,54 +246,63 @@ class ActivityPredictionController extends Controller
     private function processGeminiResponse($aiResponse, $userId)
     {
         $storedPredictions = [];
+    
+    // Extract the text from the response
+    if (isset($aiResponse['candidates'][0]['content']['parts'][0]['text'])) {
+        $responseText = $aiResponse['candidates'][0]['content']['parts'][0]['text'];
         
-        // Extract the text from the response
-        if (isset($aiResponse['candidates'][0]['content']['parts'][0]['text'])) {
-            $responseText = $aiResponse['candidates'][0]['content']['parts'][0]['text'];
-            
-            $predictionTypes = ['GOAL_PREDICTION', 'ANOMALY', 'TREND', 'INSIGHT'];
-            
-            foreach ($predictionTypes as $type) {
-                if (strpos($responseText, $type) !== false) {
-                    $startPos = strpos($responseText, $type);
-                    $endPos = false;
-                    
-                    // Find the end of tye prdction section
-                    foreach ($predictionTypes as $nextType) {
-                        if ($nextType != $type) {
-                            $nextPos = strpos($responseText, $nextType, $startPos + strlen($type));
-                            if ($nextPos !== false && ($endPos === false || $nextPos < $endPos)) {
-                                $endPos = $nextPos;
-                            }
-                        }
-                    }
-                    
-                    if ($endPos === false) {
-                        $endPos = strlen($responseText);
-                    }
-                    
-                    $sectionText = substr($responseText, $startPos + strlen($type), $endPos - $startPos - strlen($type));
-                    $sectionText = trim($sectionText, ": \n\t");
-                    
-                    
-                    $bullets = preg_split('/\s*[•\-*]\s+/', $sectionText);
-                    foreach ($bullets as $bullet) {
-                        $bullet = trim($bullet);
-                        if (!empty($bullet)) {
-                            $prediction = ActivityPrediction::create([
-                                'user_id' => $userId,
-                                'date' => now(),
-                                'prediction_type' => $type,
-                                'prediction_text' => $bullet
-                            ]);
-                            
-                            $storedPredictions[] = $prediction;
+        $predictionTypes = ['GOAL_PREDICTION', 'ANOMALY', 'TREND', 'INSIGHT'];
+        
+        foreach ($predictionTypes as $type) {
+            if (strpos($responseText, $type) !== false) {
+                $startPos = strpos($responseText, $type);
+                $endPos = false;
+                
+                foreach ($predictionTypes as $nextType) {
+                    if ($nextType != $type) {
+                        $nextPos = strpos($responseText, $nextType, $startPos + strlen($type));
+                        if ($nextPos !== false && ($endPos === false || $nextPos < $endPos)) {
+                            $endPos = $nextPos;
                         }
                     }
                 }
+                
+                if ($endPos === false) {
+                    $endPos = strlen($responseText);
+                }
+                
+                $sectionText = substr($responseText, $startPos + strlen($type), $endPos - $startPos - strlen($type));
+                $sectionText = trim($sectionText, ": \n\t");
+                
+                
+                $cleanText = $this->cleanPredictionText($sectionText);
+                
+                if (!empty($cleanText)) {
+                    $prediction = ActivityPrediction::create([
+                        'user_id' => $userId,
+                        'date' => now(),
+                        'prediction_type' => $type,
+                        'prediction_text' => $cleanText
+                    ]);
+                    
+                    $storedPredictions[] = $prediction;
+                }
             }
         }
-        
-        return $storedPredictions;
     }
+    
+    return $storedPredictions;
+}
+
+
+private function cleanPredictionText($text)
+{
+    $charsToRemove = ['*', ':', '•', '-'];
+    
+    // Remove athe above charss
+    $text = str_replace($charsToRemove, '', $text);
+    
+    // Trim 
+    return trim(preg_replace('/\s+/', ' ', $text));
+}
 }
